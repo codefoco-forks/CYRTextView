@@ -88,19 +88,22 @@ static const float kCursorVelocity = 1.0f/8.0f;
 
 - (void)_commonSetup
 {
-    // Setup observers
-    [self addObserver:self forKeyPath:NSStringFromSelector(@selector(font)) options:NSKeyValueObservingOptionNew context:CYRTextViewContext];
-    [self addObserver:self forKeyPath:NSStringFromSelector(@selector(textColor)) options:NSKeyValueObservingOptionNew context:CYRTextViewContext];
-    [self addObserver:self forKeyPath:NSStringFromSelector(@selector(selectedTextRange)) options:NSKeyValueObservingOptionNew context:CYRTextViewContext];
-    [self addObserver:self forKeyPath:NSStringFromSelector(@selector(selectedRange)) options:NSKeyValueObservingOptionNew context:CYRTextViewContext];
-
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleTextViewDidChangeNotification:) name:UITextViewTextDidChangeNotification object:self];
     
     // Setup defaults
-    self.font = [UIFont systemFontOfSize:16.0f];
+    self.font = [UIFont fontWithName:@"Menlo" size:14.0f];
+    self.syntaxTextStorage.defaultFont = self.font;
+    
     self.textColor = [UIColor blackColor];
-    self.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    
     self.autocorrectionType     = UITextAutocorrectionTypeNo;
+    if (@available(iOS 11.0, *)) {
+        self.smartDashesType = UITextSmartDashesTypeNo;
+        self.smartQuotesType = UITextSmartQuotesTypeNo;
+    }
+    self.dataDetectorTypes = 0;
+    self.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    self.spellCheckingType = UITextSpellCheckingTypeNo;
     self.lineCursorEnabled = YES;
     self.gutterBackgroundColor = [UIColor colorWithWhite:0.95 alpha:1];
     self.gutterLineColor       = [UIColor lightGrayColor];
@@ -123,36 +126,9 @@ static const float kCursorVelocity = 1.0f/8.0f;
 
 - (void)dealloc
 {
-    [self removeObserver:self forKeyPath:NSStringFromSelector(@selector(font))];
-    [self removeObserver:self forKeyPath:NSStringFromSelector(@selector(textColor))];
-    [self removeObserver:self forKeyPath:NSStringFromSelector(@selector(selectedTextRange))];
-    [self removeObserver:self forKeyPath:NSStringFromSelector(@selector(selectedRange))];
+
 }
 
-
-#pragma mark - KVO
-
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
-{
-    if ([keyPath isEqualToString:NSStringFromSelector(@selector(font))] && context == CYRTextViewContext)
-    {
-        // Whenever the UITextView font is changed we want to keep a reference in the stickyFont ivar. We do this to counteract a bug where the underlying font can be changed without notice and cause undesired behaviour.
-        self.syntaxTextStorage.defaultFont = self.font;
-    }
-    else if ([keyPath isEqualToString:NSStringFromSelector(@selector(textColor))] && context == CYRTextViewContext)
-    {
-        self.syntaxTextStorage.defaultTextColor = self.textColor;
-    }
-    else if (([keyPath isEqualToString:NSStringFromSelector(@selector(selectedTextRange))] ||
-              [keyPath isEqualToString:NSStringFromSelector(@selector(selectedRange))]) && context == CYRTextViewContext)
-    {
-        [self setNeedsDisplay];
-    }
-    else
-    {
-        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
-    }
-}
 
 
 #pragma mark - Notifications
@@ -198,7 +174,6 @@ static const float kCursorVelocity = 1.0f/8.0f;
     UITextRange *textRange = [self textRangeFromPosition:self.beginningOfDocument toPosition:self.endOfDocument];
     [self replaceRange:textRange withText:text];
 }
-
 
 #pragma mark - Line Drawing
 
