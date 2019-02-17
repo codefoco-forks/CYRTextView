@@ -376,9 +376,6 @@
 				LastUpgradeCheck = 1010;
 				ORGANIZATIONNAME = "Cyrillian, Inc.";
 				TargetAttributes = {
-					393953D2187A18F300A19DEC = {
-						DevelopmentTeam = FQHJB2L9HW;
-					};
 					393953F6187A18F300A19DEC = {
 						TestTargetID = 393953D2187A18F300A19DEC;
 					};
@@ -637,7 +634,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				DEVELOPMENT_TEAM = FQHJB2L9HW;
+				DEVELOPMENT_TEAM = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CYRTextViewExample/CYRTextViewExample-Prefix.pch";
 				INFOPLIST_FILE = "CYRTextViewExample/CYRTextViewExample-Info.plist";
@@ -654,7 +651,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				DEVELOPMENT_TEAM = FQHJB2L9HW;
+				DEVELOPMENT_TEAM = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CYRTextViewExample/CYRTextViewExample-Prefix.pch";
 				INFOPLIST_FILE = "CYRTextViewExample/CYRTextViewExample-Info.plist";
