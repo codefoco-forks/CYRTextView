@@ -34,17 +34,51 @@
 
 #import "CYRToken.h"
 
+#import <CoreText/CoreText.h>
+
 @implementation CYRToken
 
-+ (instancetype)tokenWithName:(NSString *)name expression:(NSString *)expression attributes:(NSDictionary <NSString *, id> *)attributes
+- (id)initWithName:(nullable NSString *)name
+                                           expression:(nonnull NSString *)expression
+                                      foregroundColor:(UIColor *)fgColor
+                                                 font:(nullable NSFont * )font
+                                      backgroundColor:(nullable UIColor * )bgColor;
 {
-    CYRToken *textAttribute = [CYRToken new];
+ 
     
-    textAttribute.name = name;
-    textAttribute.expression = expression;
-    textAttribute.attributes = attributes;
+    NSMutableDictionary * attributes = [[NSMutableDictionary alloc] init];
     
-    return textAttribute;
+    if (fgColor != nil)
+        [attributes setValue:fgColor forKey:NSForegroundColorAttributeName];
+    if (font != nil)
+        [attributes setValue:font forKey:NSFontAttributeName];
+    if (bgColor != nil)
+        [attributes setValue:bgColor forKey:NSBackgroundColorAttributeName];
+
+    self.name = name;
+    self.expression = expression;
+    self.attributes = attributes;
+    
+    return self;
+}
+
+- (id)initWithName:(nullable NSString *)name
+                   expression:(nonnull NSString *)expression
+              foregroundColor:(UIColor *)fgColor
+                         font:(nullable NSFont * )font
+
+
+{
+    return [self initWithName:name expression:expression foregroundColor:fgColor font:font backgroundColor: nil];
+}
+
+- (id)initWithName:(nullable NSString *)name
+                   expression:(nonnull NSString *)expression
+              foregroundColor:(UIColor *)fgColor
+
+
+{
+    return [self initWithName:name expression:expression foregroundColor:fgColor font:nil];
 }
 
 @end

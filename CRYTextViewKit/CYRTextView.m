@@ -46,7 +46,7 @@ static const float kCursorVelocity = 1.0f/8.0f;
 @interface CYRTextView ()
 
 @property (nonatomic, strong) CYRLayoutManager *lineNumberLayoutManager;
-@property (nonatomic, strong) CYRTextStorage *syntaxTextStorage;
+
 
 @end
 
@@ -85,6 +85,7 @@ static const float kCursorVelocity = 1.0f/8.0f;
     
     return self;
 }
+
 
 - (void)_commonSetup
 {
@@ -128,8 +129,6 @@ static const float kCursorVelocity = 1.0f/8.0f;
 {
 
 }
-
-
 
 #pragma mark - Notifications
 

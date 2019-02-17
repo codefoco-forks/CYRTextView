@@ -36,8 +36,10 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #import <UIKit/UIKit.h>
+
 #import "CYRToken.h"
 
+@class CYRTextStorage;
 @class CYRToken;
 
 @interface CYRTextView : UITextView
@@ -45,10 +47,13 @@
 @property (nonatomic, strong) NSArray <CYRToken *> *tokens;
 @property (nonatomic, strong) UIPanGestureRecognizer *singleFingerPanRecognizer;
 @property (nonatomic, strong) UIPanGestureRecognizer *doubleFingerPanRecognizer;
+@property (nonatomic, strong) CYRTextStorage *syntaxTextStorage;
 
 @property UIColor *gutterBackgroundColor;
 @property UIColor *gutterLineColor;
 
 @property (nonatomic, assign) BOOL lineCursorEnabled;
+
+- (id)initWithFrame:(CGRect)frame;
 
 @end

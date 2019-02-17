@@ -33,6 +33,7 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 @interface CYRToken : NSObject
 
@@ -40,6 +41,19 @@
 @property (nonatomic, strong, nullable) NSString *expression;
 @property (nonatomic, strong, nullable) NSDictionary <NSString *, id> *attributes;
 
-+ (nonnull instancetype)tokenWithName:(nullable NSString *)name expression:(nullable NSString *)expression attributes:(nullable NSDictionary <NSString *, id> *)attributes;
+- (id)initWithName:(NSString *)name
+                           expression:(NSString *)expression
+                      foregroundColor:(UIColor *)fgColor;
+
+- (id)initWithName:(NSString *)name
+                           expression:(NSString *)expression
+                      foregroundColor:(UIColor *)fgColor
+                                 font:(nullable UIFont * )font;
+
+- (id)initWithName:(NSString *)name
+                           expression:(NSString *)expression
+                        foregroundColor:(UIColor *)fgColor
+                        font:(nullable NSFont * )font
+                        backgroundColor:(nullable UIFont * )bgColor;
 
 @end

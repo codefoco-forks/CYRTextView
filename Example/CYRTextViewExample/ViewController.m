@@ -23,21 +23,11 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    self.navigationItem.title = @"CYRTextView";
-	
-    self.view.backgroundColor = [UIColor whiteColor];
+     
+    self.textView = (QEDTextView *)_codeView;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
-    
-    QEDTextView *textView = [[QEDTextView alloc] initWithFrame:self.view.bounds];
-    textView.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
-    textView.delegate = self;
-
-    self.textView = textView;
-    
-    [self.view addSubview:textView];
     
     self.textView.text = @"// Test comment\n\n"\
     @"// Let's solve our first equation\n"\
@@ -48,10 +38,13 @@
     @"g(x) := 0.005 * (x + 1) * (x - 1) + 0.1 * (random - 0.5)\n\n"\
     @"// Now let's plot the two functions together on one chart\n"\
     @"plot f(x), g(x)";
+    
+    
+    [self.textView performSelector:@selector(becomeFirstResponder)
+                        withObject:nil
+                        afterDelay:0.1f];
+    
 }
-
-
-#pragma mark - Notification Handlers
 
 - (void)keyboardWillShow:(NSNotification*)aNotification
 {
@@ -82,21 +75,22 @@
     [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] getValue:&animationDuration];
     [[userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] getValue:&keyboardEndFrame];
     
+   
     [UIView beginAnimations:nil context:nil];
     [UIView setAnimationDuration:animationDuration];
     [UIView setAnimationCurve:animationCurve];
     
-    CGRect newFrame = _textView.frame;
-    CGRect keyboardFrame = [self.view convertRect:keyboardEndFrame toView:nil];
-    newFrame.size.height -= keyboardFrame.size.height * (up?1:-1);
-    _textView.frame = newFrame;
+    CGRect newFrame = self.textView.frame;
+    CGRect keyboardFrame = [self.view convertRect:keyboardEndFrame toView:self.view];
+    newFrame.size.height -= keyboardFrame.size.height  * (up?1:-1);
+    self.textView.frame = newFrame;
     
     [UIView commitAnimations];
 }
 
 - (void)dismissKeyboard
 {
-    [_textView resignFirstResponder];
+    [self.textView resignFirstResponder];
 }
 
 @end

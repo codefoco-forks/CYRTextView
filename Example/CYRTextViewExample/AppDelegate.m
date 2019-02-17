@@ -14,14 +14,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    UIWindow *window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    self.window = window;
-    
-    ViewController *viewController = [ViewController new];
-    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
-    
-    self.window.rootViewController = navigationController;
-    [self.window makeKeyAndVisible];
+
     
     return YES;
 }
