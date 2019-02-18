@@ -43,7 +43,7 @@
 static void *CYRTextViewContext = &CYRTextViewContext;
 static const float kCursorVelocity = 1.0f/8.0f;
 
-@interface CYRTextView ()
+@interface CYRTextView () <UITextViewDelegate>
 
 @property (nonatomic, strong) CYRLayoutManager *lineNumberLayoutManager;
 
@@ -120,10 +120,20 @@ static const float kCursorVelocity = 1.0f/8.0f;
     _doubleFingerPanRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(doubleFingerPanHappend:)];
     _doubleFingerPanRecognizer.minimumNumberOfTouches = 2;
     [self addGestureRecognizer:_doubleFingerPanRecognizer];
+    
+    self.delegate = self;
+}
+
+- (void)textViewDidChangeSelection:(UITextView *)textView
+{
+
+    [self setNeedsDisplay];
 }
 
 
 #pragma mark - Cleanup
+
+
 
 - (void)dealloc
 {
