@@ -95,6 +95,8 @@ static const float kCursorVelocity = 1.0f/8.0f;
     self.font = [UIFont fontWithName:@"Menlo" size:14.0f];
     self.syntaxTextStorage.defaultFont = self.font;
     
+    self.layoutManager.allowsNonContiguousLayout = NO;
+    
     self.textColor = [UIColor blackColor];
     
     self.autocorrectionType     = UITextAutocorrectionTypeNo;
