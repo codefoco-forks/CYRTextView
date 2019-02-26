@@ -55,5 +55,6 @@
 @property (nonatomic, assign) BOOL lineCursorEnabled;
 
 - (id)initWithFrame:(CGRect)frame;
+-(void)copyTextViewProperties:(UITextView*)textView;
 
 @end

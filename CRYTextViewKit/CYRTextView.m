@@ -40,10 +40,8 @@
 
 #define RGB(r,g,b) [UIColor colorWithRed:r/255.0f green:g/255.0f blue:b/255.0f alpha:1.0f]
 
-static void *CYRTextViewContext = &CYRTextViewContext;
-static const float kCursorVelocity = 1.0f/8.0f;
 
-@interface CYRTextView () <UITextViewDelegate>
+@interface CYRTextView ()
 
 @property (nonatomic, strong) CYRLayoutManager *lineNumberLayoutManager;
 
@@ -89,15 +87,9 @@ static const float kCursorVelocity = 1.0f/8.0f;
 
 - (void)_commonSetup
 {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleTextViewDidChangeNotification:) name:UITextViewTextDidChangeNotification object:self];
-    
     // Setup defaults
-    self.font = [UIFont fontWithName:@"Menlo" size:14.0f];
-    self.syntaxTextStorage.defaultFont = self.font;
-    
-    self.layoutManager.allowsNonContiguousLayout = NO;
-    
-    self.textColor = [UIColor blackColor];
+    UIFont * font = [UIFont fontWithName:@"Menlo" size:14.0f];
+    self.syntaxTextStorage.defaultFont = font;
     
     self.autocorrectionType     = UITextAutocorrectionTypeNo;
     if (@available(iOS 11.0, *)) {
@@ -107,64 +99,98 @@ static const float kCursorVelocity = 1.0f/8.0f;
     self.dataDetectorTypes = 0;
     self.autocapitalizationType = UITextAutocapitalizationTypeNone;
     self.spellCheckingType = UITextSpellCheckingTypeNo;
-    self.lineCursorEnabled = YES;
-    self.gutterBackgroundColor = [UIColor colorWithWhite:0.95 alpha:1];
-    self.gutterLineColor       = [UIColor lightGrayColor];
+
     
     // Inset the content to make room for line numbers
     self.textContainerInset = UIEdgeInsetsMake(8, self.lineNumberLayoutManager.gutterWidth, 8, 0);
     
-    // Setup the gesture recognizers
-    _singleFingerPanRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(singleFingerPanHappend:)];
-    _singleFingerPanRecognizer.maximumNumberOfTouches = 1;
-    [self addGestureRecognizer:_singleFingerPanRecognizer];
-    
-    _doubleFingerPanRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(doubleFingerPanHappend:)];
-    _doubleFingerPanRecognizer.minimumNumberOfTouches = 2;
-    [self addGestureRecognizer:_doubleFingerPanRecognizer];
-    
-    self.delegate = self;
+    self.lineCursorEnabled = NO;
+    self.gutterBackgroundColor = [UIColor colorWithWhite:0.95 alpha:1];
+    self.gutterLineColor       = [UIColor lightGrayColor];
 }
 
 - (void)textViewDidChangeSelection:(UITextView *)textView
 {
-
     [self setNeedsDisplay];
 }
 
+-(void)copyTextViewProperties:(UITextView*)textView
+{
+    // UITextView
+    self.text = textView.text;
+    self.font = textView.font;
+    self.textColor = textView.textColor;
+    self.textAlignment = textView.textAlignment;
+    self.selectedRange = textView.selectedRange;
+    self.editable = textView.editable;
+    self.selectable = textView.selectable;
+    self.dataDetectorTypes = textView.dataDetectorTypes;
+    self.allowsEditingTextAttributes = textView.allowsEditingTextAttributes;
+    
+    // UITextViewTraits
+    self.autocapitalizationType = textView.autocapitalizationType;
+    self.autocorrectionType = textView.autocorrectionType;
+    self.spellCheckingType = textView.spellCheckingType;
+    
+    if (@available(iOS 11.0, *)) {
+        self.smartDashesType = textView.smartDashesType;
+        self.smartQuotesType = textView.smartQuotesType;
+        self.smartInsertDeleteType = textView.smartInsertDeleteType;
+    }
+    
+    self.keyboardType = textView.keyboardType;
+    self.keyboardAppearance = textView.keyboardAppearance;
+    self.returnKeyType = textView.returnKeyType;
+    self.enablesReturnKeyAutomatically = textView.enablesReturnKeyAutomatically;
+    self.secureTextEntry = textView.secureTextEntry;
+    
+    // UIScrollView
+    if (@available(iOS 11.0, *)) {
+        self.contentInsetAdjustmentBehavior = textView.contentInsetAdjustmentBehavior;
+    }
+    self.bounces = textView.bounces;
+    self.alwaysBounceVertical = textView.alwaysBounceVertical;
+    self.alwaysBounceHorizontal = textView.alwaysBounceHorizontal;
+    self.pagingEnabled = textView.pagingEnabled;
+    self.scrollEnabled = textView.scrollEnabled;
+    self.showsVerticalScrollIndicator = textView.showsVerticalScrollIndicator;
+    self.showsHorizontalScrollIndicator = textView.showsHorizontalScrollIndicator;
+    self.scrollIndicatorInsets = textView.scrollIndicatorInsets;
+    self.indicatorStyle = textView.indicatorStyle;
+    self.decelerationRate = textView.decelerationRate;
+    self.indexDisplayMode = textView.indexDisplayMode;
+    self.delaysContentTouches = textView.delaysContentTouches;
+    self.canCancelContentTouches = textView.canCancelContentTouches;
+    self.minimumZoomScale = textView.minimumZoomScale;
+    self.maximumZoomScale = textView.maximumZoomScale;
+    self.bouncesZoom = textView.bouncesZoom;
+    self.keyboardDismissMode = textView.keyboardDismissMode;
+    
+    // UIView
+    self.contentMode = textView.contentMode;
+    self.semanticContentAttribute = textView.semanticContentAttribute;
+    self.tag = textView.tag;
+    self.userInteractionEnabled = textView.userInteractionEnabled;
+    self.multipleTouchEnabled = textView.multipleTouchEnabled;
+    self.alpha = textView.alpha;
+    self.backgroundColor = textView.backgroundColor;
+    self.tintColor = textView.tintColor;
+    self.opaque = textView.opaque;
+    self.hidden = textView.hidden;
+    self.clearsContextBeforeDrawing = textView.clearsContextBeforeDrawing;
+    self.clipsToBounds = textView.clipsToBounds;
+    self.autoresizesSubviews = textView.autoresizesSubviews;
+    
+    self.translatesAutoresizingMaskIntoConstraints = textView.translatesAutoresizingMaskIntoConstraints;
+    self.autoresizingMask = textView.autoresizingMask;
+    }
 
 #pragma mark - Cleanup
-
-
 
 - (void)dealloc
 {
 
 }
-
-#pragma mark - Notifications
-
-- (void)handleTextViewDidChangeNotification:(NSNotification *)notification
-{
-    if (notification.object == self)
-    {
-        CGRect line = [self caretRectForPosition: self.selectedTextRange.start];
-        CGFloat overflow = line.origin.y + line.size.height - ( self.contentOffset.y + self.bounds.size.height - self.contentInset.bottom - self.contentInset.top );
-        
-        if ( overflow > 0 )
-        {
-            // We are at the bottom of the visible text and introduced a line feed, scroll down (iOS 7 does not do it)
-            // Scroll caret to visible area
-            CGPoint offset = self.contentOffset;
-            offset.y += overflow + 7; // leave 7 pixels margin
-            // Cannot animate with setContentOffset:animated: or caret will not appear
-//            [UIView animateWithDuration:.2 animations:^{
-//                [self setContentOffset:offset];
-//            }];
-        }
-    }
-}
-
 
 #pragma mark - Overrides
 
@@ -218,54 +244,5 @@ static const float kCursorVelocity = 1.0f/8.0f;
     [super drawRect:rect];
 }
 
-
-#pragma mark - Gestures
-
-// Sourced from: https://github.com/srijs/NLTextView
-- (BOOL)gestureRecognizerShouldBegin:(UIPanGestureRecognizer *)gestureRecognizer
-{
-    // Only accept horizontal pans for the code navigation to preserve correct scrolling behaviour.
-    if (gestureRecognizer == _singleFingerPanRecognizer || gestureRecognizer == _doubleFingerPanRecognizer)
-    {
-        CGPoint translation = [gestureRecognizer translationInView:self];
-        return fabs(translation.x) > fabs(translation.y);
-    }
-    
-    return YES;
-    
-}
-
-// Sourced from: https://github.com/srijs/NLTextView
-- (void)singleFingerPanHappend:(UIPanGestureRecognizer *)sender
-{
-    if (sender.state == UIGestureRecognizerStateBegan)
-    {
-        startRange = self.selectedRange;
-    }
-    
-    CGFloat cursorLocation = MAX(startRange.location + [sender translationInView:self].x * kCursorVelocity, 0);
-    
-    self.selectedRange = NSMakeRange(cursorLocation, 0);
-}
-
-// Sourced from: https://github.com/srijs/NLTextView
-- (void)doubleFingerPanHappend:(UIPanGestureRecognizer *)sender
-{
-    if (sender.state == UIGestureRecognizerStateBegan)
-    {
-        startRange = self.selectedRange;
-    }
-    
-    CGFloat cursorLocation = MAX(startRange.location + [sender translationInView:self].x * kCursorVelocity, 0);
-    
-    if (cursorLocation > startRange.location)
-    {
-        self.selectedRange = NSMakeRange(startRange.location, fabs(startRange.location - cursorLocation));
-    }
-    else
-    {
-        self.selectedRange = NSMakeRange(cursorLocation, fabs(startRange.location - cursorLocation));
-    }
-}
 
 @end

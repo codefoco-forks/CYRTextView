@@ -51,7 +51,9 @@
 
 -(id)awakeAfterUsingCoder: (NSCoder*)aDecoder
 {
-   return [[QEDTextView alloc]initWithFrame: self.frame];
+    QEDTextView * newView = [[QEDTextView alloc]initWithFrame: self.frame];
+    [newView copyTextViewProperties: self];
+    return newView;
 }
 
 
