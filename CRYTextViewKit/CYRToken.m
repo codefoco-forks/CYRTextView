@@ -41,7 +41,7 @@
 - (id)initWithName:(nullable NSString *)name
                                            expression:(nonnull NSString *)expression
                                       foregroundColor:(UIColor *)fgColor
-                                                 font:(nullable NSFont * )font
+                                                 font:(nullable UIFont * )font
                                       backgroundColor:(nullable UIColor * )bgColor;
 {
  
@@ -65,7 +65,7 @@
 - (id)initWithName:(nullable NSString *)name
                    expression:(nonnull NSString *)expression
               foregroundColor:(UIColor *)fgColor
-                         font:(nullable NSFont * )font
+                         font:(nullable UIFont * )font
 
 
 {

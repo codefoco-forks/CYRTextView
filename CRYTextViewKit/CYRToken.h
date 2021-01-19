@@ -53,7 +53,7 @@
 - (id)initWithName:(NSString *)name
                            expression:(NSString *)expression
                         foregroundColor:(UIColor *)fgColor
-                        font:(nullable NSFont * )font
+                        font:(nullable UIFont * )font
                         backgroundColor:(nullable UIFont * )bgColor;
 
 @end
